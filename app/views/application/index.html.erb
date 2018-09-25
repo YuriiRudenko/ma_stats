@@ -1,0 +1,56 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<h1 style="text-align: center;">MASTERS ACADEMY 2018-2019</h1>
+<table width="100%">
+  <tr>
+    <td width="50%">
+      <canvas id="pie" width="400vh" height="400vw"></canvas>
+    </td>
+    <td>
+      <table>
+        <tr height="200px">
+          <td width="350px" style="font-size: 40px; color: red">TOTAL CHARITY</td>
+          <td style="font-size: 40px; color: red">₴ <%= @data[:total_charity] %></td>
+        </tr>
+
+        <tr height="200px">
+          <td width="350px" style="font-size: 30px;">VOYTIVAYTI</td>
+          <td style="font-size: 30px"><%= @data[:voyti_v_it_rating].round(0) %>%</td>
+        </tr>
+
+        <% @data[:rating].sort_by { |k, v| v }.reverse.each do |title, count| %>
+          <tr>
+            <td style="font-size: 30px"><%= title %></td>
+            <td style="font-size: 30px"><%= (count.to_f / @data[:total] * 100).round(2) %>%</td>
+            <td style="font-size: 30px"><%= count %></td>
+          </tr>
+        <% end %>
+      </table>
+    </td>
+  </tr>
+</table>
+<script>
+    new Chart(document.getElementById("pie"), {
+        type: 'pie',
+        data: {
+            labels: <%= raw @data[:rating].map { |k, v| "#{k} (#{v})" } %>,
+            datasets: [{
+                label: "MA",
+                backgroundColor: ["green", "lime","blue","yellow","red"],
+                data: <%= raw @data[:rating].values %>
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: 'MASTERS ACADEMY 2018-2019'
+            },
+            tooltips: {
+                intersect: false
+            }
+        }
+    });
+
+    setTimeout(function(){
+        window.location.reload(false);
+    }, 30000)
+</script>
