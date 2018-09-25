@@ -6,8 +6,8 @@ class Doc
 
   OOB_URI = 'urn:ietf:wg:oauth:2.0:oob'.freeze
   APPLICATION_NAME = 'Google Sheets API Ruby Quickstart'.freeze
-  CREDENTIALS_PATH = 'credentials.json'.freeze
-  TOKEN_PATH = 'token.yaml'.freeze
+  CREDENTIALS_PATH = "#{Rails.root}/credentials.json".freeze
+  TOKEN_PATH = "#{Rails.root}/token.yaml".freeze
   SCOPE = Google::Apis::SheetsV4::AUTH_SPREADSHEETS_READONLY
   IT_WORDS = %w[войти вайти].freeze
 
