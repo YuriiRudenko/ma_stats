@@ -19,22 +19,11 @@ class Doc
 #
 # @return [Google::Auth::UserRefreshCredentials] OAuth2 credentials
   def authorize
-    File.delete(ENV['CREDENTIALS_PATH']) if File.exists?(ENV['CREDENTIALS_PATH'])
-    File.write(ENV['CREDENTIALS_PATH'], ENV['CREDENTIALS'])
-
-    File.delete(ENV['TOKEN_PATH']) if File.exists?(ENV['TOKEN_PATH'])
-    File.write(ENV['TOKEN_PATH'], ENV['TOKEN'])
-
     client_id = Google::Auth::ClientId.from_file(ENV['CREDENTIALS_PATH'])
     token_store = Google::Auth::Stores::FileTokenStore.new(file: ENV['TOKEN_PATH'])
     authorizer = Google::Auth::UserAuthorizer.new(client_id, ENV['SCOPE'], token_store)
     user_id = 'default'
-    auth = authorizer.get_credentials(user_id)
-
-    File.delete(ENV['CREDENTIALS_PATH']) if File.exists?(ENV['CREDENTIALS_PATH'])
-    File.delete(ENV['TOKEN_PATH']) if File.exists?(ENV['TOKEN_PATH'])
-
-    auth
+    authorizer.get_credentials(user_id)
   end
 
   def get
