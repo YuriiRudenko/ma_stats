@@ -32,10 +32,16 @@ class Doc
     service.authorization = authorize
 
     spreadsheet_id = ENV['SPREADSHEET_ID']
-    response = service.get_spreadsheet_values(spreadsheet_id, 'M2:M1000')
-    response
+    charity = [
+      [service.get_spreadsheet_values(spreadsheet_id, 'M2:M1000').values].flatten.map(&:to_f).sum,
+      [service.get_spreadsheet_values(spreadsheet_id, 'S2:S1000').values].flatten.compact.map(&:to_f).sum,
+      [service.get_spreadsheet_values(spreadsheet_id, 'AB2:AB1000').values].flatten.compact.map(&:to_f).sum,
+      [service.get_spreadsheet_values(spreadsheet_id, 'AN2:AN1000').values].flatten.compact.map(&:to_f).sum,
+      [service.get_spreadsheet_values(spreadsheet_id, 'AS2:AS1000').values].flatten.compact.map(&:to_f).sum,
+      [service.get_spreadsheet_values(spreadsheet_id, 'AU2:AU1000').values].flatten.compact.map(&:to_f).sum,
+    ]
 
-    data = { total_charity: response.values.flatten.map(&:to_f).sum }
+    data = { total_charity: charity.sum }
     data[:rating] = (service.get_spreadsheet_values(spreadsheet_id, 'H2:H1000').values || []).flatten.group_by { |i| i }.map { |k, v| [k, v.size] }.to_h
     data[:total] = data[:rating].values.sum
     value = (service.get_spreadsheet_values(spreadsheet_id, 'A2:Z1000').values || []).flatten.count { |v| IT_WORDS.any? { |w| w.in? v } }
